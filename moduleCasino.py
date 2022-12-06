@@ -52,6 +52,24 @@ def fun_mise(solde):
     return mise
 
 def get_stats(mise_moy, nb_coup_moy):
+    print(mise_moy)
     np.array(mise_moy)
     np.array(nb_coup_moy)
     return np.mean(mise_moy), np.mean(nb_coup_moy)
+
+def set_level_max(level, level_max, cur, cnx, name_user):
+    sql_modify_level_actual ="""UPDATE `user` 
+                    SET `level_actual`= %s
+                    WHERE name = %s"""
+    value = (level, name_user)
+    cur.execute(sql_modify_level_actual, value)
+    cnx.commit() 
+    if level > level_max:
+        print(level)
+        level_max = level
+        sql_modify_level_max ="""UPDATE `user` 
+                    SET `level_max`= %s
+                    WHERE name = %s"""
+        value = (level_max, name_user)
+        cur.execute(sql_modify_level_max, value)
+        cnx.commit()    

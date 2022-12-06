@@ -95,20 +95,23 @@ def main():
                     print("\t- Vous avez gagne le double de votre mise !")
                     if level + 1 < 3:
                         level += 1
+                    mc.set_level_max(level, level_max, cur, cnx, name_user)    
                     mc.continuer()
                 elif nb_coup == 1:
                     solde += mise
                     print("\t- Vous avez gagne votre mise !")
                     if level + 1 < 3:
                         level += 1
+                    mc.set_level_max(level, level_max, cur, cnx, name_user)    
                     mc.continuer()
                 else:
                     solde += mise / 2
                     print("\t- Vous avez gagne la moitie de votre mise !")
                     if level + 1 < 3:
                         level += 1
-                        mc.continuer()
-                        print("\t- Super ! Vous passez au Level "+str(level)+".")
+                    mc.set_level_max(level, level_max, cur, cnx, name_user)    
+                    mc.continuer()
+                    print("\t- Super ! Vous passez au Level "+str(level)+".")
                 break
             elif nb_user > nb_python and (DIFFICULTY[level][0] - nb_coup - 1) > 0:
                 print("\t- Votre nbre est trop grand !\n")
@@ -120,10 +123,13 @@ def main():
                 print("\t- Vous avez perdu ! Mon nombre est "+str(nb_python)+" !")
                 solde -= mise
                 stats = mc.get_stats(mise_moy, nb_coup_moy)
-                print("")
+                print(stats)
                 if level > 0:
                     level -= 1
-                    mc.continuer()
+                mc.continuer()
+                mc.set_level_max(level, level_max, cur, cnx, name_user)    
+
+
                 
         
         #print("")
