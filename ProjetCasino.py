@@ -4,6 +4,7 @@ from random import randint
 import mysql.connector
 import datetime
 import moduleCasino as mc
+from babel.dates import format_date, format_datetime, format_time
 
 def main():
     mise_moy = []
@@ -16,14 +17,49 @@ def main():
     
     name_user = input("\t- Je suis Python. Quel est votre pseudo ? ")
     
-    sql_check_if_user_exist = """SELECT `name` FROM `user` WHERE name = %s"""
-    sql_add_user = """INSERT INTO user 
-    (name, solde, timestamp, nb_mise, mise_total, level_max, level_actual, nb_win_first_try, nb_win, nb_lose, gain_max, mise_max) 
-    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
-    value = (name_user, solde, date, 0, 1, 0, 0, 0, 0, 0, 0, 0)
-    cur.execute(sql_add_user, value)
-    cnx.commit()
-    mc.rules(name_user)
+    sql_check_if_user_exist = """SELECT 
+    count(`name`) AS exist, 
+    name,
+    solde,	
+    timestamp, 
+    nb_mise,
+    mise_total, 
+    level_max,	
+    level_actual,	
+    nb_win_first_try,	
+    nb_win,	
+    nb_lose,	
+    gain_max,	
+    mise_max	
+    FROM `user` WHERE name = %s"""
+    value = name_user
+    cur.execute(sql_check_if_user_exist, (value,))
+    myresult = cur.fetchone()
+
+    if myresult[0] > 1:
+        name_user = myresult[1]
+        solde = myresult[2]
+        date = myresult[3]
+        nb_mise = myresult[4]
+        mise_total = myresult[5]
+        level_max = myresult[6]
+        level = myresult[7]
+        nb_win_first_try = myresult[7]
+        nb_win = myresult[8]
+        nb_lose = myresult[9]
+        gain_max = myresult[10]
+        mise_max = myresult[11]
+        print("\t- Votre dernière connexion remonte au", format_date(date, format='long', locale='fr'))
+        print()
+    else: 
+        (8, 'Mat', 10.0, datetime.datetime(2022, 12, 6, 12, 58), 0, 1.0, 0, 0, 0, 0, 0, 0.0, 0.0)
+        sql_add_user = """INSERT INTO user 
+        (name, solde, timestamp, nb_mise, mise_total, level_max, level_actual, nb_win_first_try, nb_win, nb_lose, gain_max, mise_max) 
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+        value = (name_user, solde, date, 0, 1, 0, 0, 0, 0, 0, 0, 0)
+        cur.execute(sql_add_user, value)
+        cnx.commit()
+        mc.rules(name_user)
  
     
     while True:
