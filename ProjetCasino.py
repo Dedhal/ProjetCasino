@@ -51,17 +51,32 @@ def main():
                 if nb_coup == 0:
                     solde += mise * 2
                     print("\t- Vous avez gagne le double de votre mise !")
+                    
+                    # Highest gain
+                    gain_max = mise * 2
+                    print("\t- Gain le plus élevé : "+str(gain_max))
+
                     if level + 1 < 3:
                         level += 1
                         mc.continuer()
                 elif nb_coup == 1:
                     solde += mise
+
+                    # Highest gain
+                    gain_max = mise
+                    print("\t- Gain le plus élevé : "+str(gain_max))
+
                     print("\t- Vous avez gagne votre mise !")
                     if level + 1 < 3:
                         level += 1
                         mc.continuer()
                 else:
                     solde += mise / 2
+
+                    # Highest gain
+                    gain_max = mise / 2
+                    print("\t- Gain le plus élevé : "+str(gain_max))
+
                     print("\t- Vous avez gagne la moitie de votre mise !")
                     if level + 1 < 3:
                         level += 1
