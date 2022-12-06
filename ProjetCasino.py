@@ -4,6 +4,31 @@ from random import randint
 import numpy as np
 import mysql.connector
 
+def rules(name_user):
+    print("\t- Hello " + name_user + ", vous avez 10e, Tres bien ! Installez vous SVP a la table de pari.\n\t\t\t Je vous expliquerai le principe du jeu : \n")
+    print("\t- Je viens de penser a un nombre entre 1 et 10. Devinez lequel ?\n")
+    print("\t- Att : vous avez le droit a trois essais !\n")
+    print("\t- Si vous devinez mon nombre des le premier coup, vous gagnez le double de votre mise !\n")
+    print("\t- Si vous le devinez au 2e coup, vous gagnez exactement votre mise !\n")
+    print("\t- Si vous le devinez au 3e coup, vous gagnez la moitie de votre mise !\n")
+    print("\t- Si vous ne le devinez pas au 3e coup, vous perdez votre mise et vous avez le droit :\n")
+    print("\t\t- de retenter votre chance avec l'argent qu'il vous reste pour reconquerir le level perdu.\n")
+    print("\t\t- de quitter le jeu.\n")
+    print("\t- Des que vous devinez mon nombre : vous avez le droit de quitter le jeu et de partir avec vos gains OU \n\t\tde continuer le jeu en passant au level superieur.\n")
+
+def user_input(max):
+    nb_user = input("\t- Alors mon nombre est : ")
+    while True:
+        try:
+            nb_user = int(nb_user)
+            if(nb_user < 1 or nb_user > max):
+                break
+            else:
+                raise ValueError
+        
+        except ValueError:
+            nb_user = input("\t- Je ne comprends pas ! Entrer SVP un nombre entre 1 et "+str(max)+" : ")
+    
 def continuer():
     while True:
         on = input("\t- Voulez vous continuer a jouer ? (O/N)")
@@ -41,108 +66,10 @@ def main():
     DOTATION = 10
     solde = DOTATION
     level = 0
-#    """
-#	*  *  *  *  *  *  *  *  *  *  * PROJET : REALISER UN JEU DE CASINO *  *  *  *  *  *  *  *  *\n
-#	Le jeu comporte 3 levels avec la possibilié que le joueur choissise son level (si ce n'est pas sa 1è fois dans le Casino).
-#	En d'autres termes, tout nouveau joueur doit passer par le 1è level. Suite à la 1è partie, il a le droit de choisir son level en lui rappelant / proposant le dernier niveau atteint\n.
-#	Lors de chaque niveau, Python tire un nombre : level 1 (entre 1 et 10),
-#	level2 (1 et 20), level3 (1 et 30). C'est à vous de deviner le nombre mystérieux avec 3 essais (en tout) lors du 1è 
-#	level, 5 au 2è level et 7 au 3è level. Chaque essai ne durera pas plus de 10 secondes. Au-delà, 
-#	vous perdez votre essai. Att : si vous perdez un level, vous rejouez le level précédent.
-#	Quand vous souhaitez quitter le jeu, un compteur de 10 secondes est mis en place. 
-#	En absence de validation de la décision, le jeu est terminé.
-#	Python fournit enfin les statistiques du jeu (voir ci-dessous).
-  
-#\n\n
-#	Les messages à imprimer (à respecter) : \n
-#	* Vous pouvez les personnaliser en soulignant les mots-d'intérêt et en adaptant un jeu de couleur suivant le type de message (perte / gain)
-#	* Proposer au joueur si il veut bien afficher les régles du jeu ?\n      
-#	\t- Je suis Python. Quel est votre pseudo ? \n     
-#	\t- Hello René, vous avez 10 €, Très bien ! Installez vous SVP à la table de pari.\n\t\t\t Je vous expliquerai le principe du jeu : \n
-#	\t- Je viens de penser à un nombre entre 1 et 10. Devinez lequel ?\n
-#	\t- Att : vous avez le droit à trois essais !\n
-#	\t- Si vous devinez mon nombre dès le premier coup, vous gagnez le double de votre mise !\n
-#	\t- Si vous le devinez au 2è coup, vous gagnez exactement votre mise !\n
-#	\t- Si vous le devinez au 3è coup, vous gagnez la moitiè votre mise !\n    
-#	\t- Si vous ne le devinez pas au 3è coup, vous perdez votre mise et
-#	\tvous avez le droit : 
-#	\t\t- de retenter votre chance avec l'argent qu'il vous reste pour reconquérir le level perdu.
-#	\t\t- de quitter le jeu.\n
-#	\t- Dès que vous devinez mon nombre : vous avez le droit de quitter le jeu et de partir avec vos gains OU \n\t\tde continuer le jeu en passant au level supérieur.\n     
-#	\t- Le jeu commence, entrez votre mise : ?\n
-#	\t- Le montant saisi n'est pas valide. Entrer SVP un montant entre 1 et 10 € :  ?\n    
-#	\t- Alors mon nombre est : ?\n
-#	\t- Je ne comprends pas ! Entrer SVP un nombre entre 1 et 10 :  ?\n
-#	\t- Vous avez dépassé le délai de 10 secondes" ! Vous perdez l'essai courant\n\t\t\t et il vous reste "E" essai(s) !\n
-#	\t- Votre nbre est trop grand !\n
-#	\t- Votre nbre est trop petit !\n
-#	\t- Il vous reste une chance !\n      
-#	\t- Bingo René, vous avez gagné en "N" coup(s) et vous avez emporté "E" € !\n
-#	\t- Vous avez perdu ! Mon nombre est "nb_python" !\n
-#	\t- Souhaitez-vous continuer la partie (O/N) ?\n
-#	\t- Je ne comprends pas votre réponse. Souhaitez-vous continuer la partie (O/N) ?\n
-#	\t- Au revoir ! Vous finissez la partie avec "M" €.\n    
-#	\t- Super ! Vous passez au Level 2.\n
-#	\t- Les statistiques du level 1 sont les suivantes : ...
-#	\t- Rappelez vous, le principe est le même sauf que mon nombre est maintenant entre 1 et 20 et\n\t\t vous avez le droit à 5 essais !\n
-#	\t- Entrez votre mise : ?\n
-#	\t- Erreur, votre mise est plus elevé que votre solde.\n
-#	\t- Entrer une mise inférieure ou égale à "S" € : ?\n
-#	\t ... \n  
-#	\t- Super ! Vous passez au Level 3 !\n
-#	\t- Les statistiques du level 2 sont les suivantes : ...    
-#	\t- Rappelez vous, le principe est le même sauf que mon nombre est entre 1 et 30 et\n\t\t vous avez le droit à 7 essais !\n 
-#	\t ... \n
-#	\t Bravo, vous avez gagné ! Les statistiques de la partie sont les suivantes : ... \n    
-#	\t- Rebonjour René, Content de vous revoir au Casino, prêt pour un nouveau challenge !\n.
-#	\t- Voici statistiques, depuis la 1è fois jj/mm/aaaa hh:mm :\n
-#	\t\t- Vos meilleures statistiques : 
-#	\t\t\t- Level le plus élevé atteint est "level",\n
-#	\t\t\t- Vous avez réussi à trouver le bon nombre dès le 1è coup "f" fois.\n
-#	\t\t\t- Le gain le plus elevé est
-#	\t\t\t- La mise la plus elevé est 
-#	\t\t\t- ...
-  
-#	\t\t- Vos pires statistiques : 
-#	\t\t\t- ...
-  
-#	\tVos moyennes : 
-#	\t\t\t- La mise moyenne est de "mise_moy"    
-#	\t\t\t - Le nombre moyen de tentatives pour trouver le bon nombre est : 
-#	\t\t\t(on ne comptabilisera le nombre de coups qu'en cas de réussite)\n 
-#\t\t\t-...     
-  
-#	\t- Pouvez-vous faire mieux ? :\n
-  
-#le pourcentage de réussite
-
-#\n\n\n
-#	Les noms des vars à respecter (liste non exhaustive) :\n
-#	\t- name_user = le nom de l'utilisateur\n
-#	\t- nb_python = le nombre choisi par l'ordi aléatoirement !\n
-#	\t- nb_user = le nombre choisi par le user !\n
-#	\t- nb_coup = le nombre de coup restant pour le user !\n 
-#	\t- level = niveau de jeu : 1, 2, 3 !\n     
-#	\t- mise = le montant de la mise du joueur !\n
-#	\t- dotation = la dotation initiale du joueur !\n
-#	\t- gain = le montant de la mise du joueur !\n
-#	\t- solde = le montant de la mise du joueur !\n  
-#	\t- mise moyenne est de "mise_moy"\n
-#	\t- ...
-#	"""
 
     name_user = input("\t- Je suis Python. Quel est votre pseudo ? ")
-    print("\t- Hello " + name_user + ", vous avez 10e, Tres bien ! Installez vous SVP a la table de pari.\n\t\t\t Je vous expliquerai le principe du jeu : \n")
-    print("\t- Je viens de penser a un nombre entre 1 et 10. Devinez lequel ?\n")
-    print("\t- Att : vous avez le droit a trois essais !\n")
-    print("\t- Si vous devinez mon nombre des le premier coup, vous gagnez le double de votre mise !\n")
-    print("\t- Si vous le devinez au 2e coup, vous gagnez exactement votre mise !\n")
-    print("\t- Si vous le devinez au 3e coup, vous gagnez la moitie de votre mise !\n")
-    print("\t- Si vous ne le devinez pas au 3e coup, vous perdez votre mise et vous avez le droit :\n")
-    print("\t\t- de retenter votre chance avec l'argent qu'il vous reste pour reconquerir le level perdu.\n")
-    print("\t\t- de quitter le jeu.\n")
-    print("\t- Des que vous devinez mon nombre : vous avez le droit de quitter le jeu et de partir avec vos gains OU \n\t\tde continuer le jeu en passant au level superieur.\n")
-
+    rules(name_user)
+    
     while True:
         print("\t- Votre solde: "+str(solde)+"e")
         
@@ -154,14 +81,8 @@ def main():
         print(nb_python)
         
         for nb_coup in range(DIFFICULTY[level][0]):
-            nb_user = input("\t- Alors mon nombre est : ")
-            while True:
-                try:
-                    nb_user = int(nb_user)
-                    break
-                
-                except:
-                    nb_user = input("\t- Je ne comprends pas ! Entrer SVP un nombre entre 1 et 10 : ")
+            
+            nb_user = user_input(DIFFICULTY[level][1])
                     
             if nb_user == nb_python:
                 print("\t- Bravo, vous avez gagne !")
