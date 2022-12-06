@@ -1,8 +1,9 @@
 import numpy as np
+import datetime
 
-def rules(name_user):
+def rules(name_user, DIFFICULTY, level):
     print("\t- Hello " + name_user + ", vous avez 10e, Tres bien ! Installez vous SVP a la table de pari.\n\t\t\t Je vous expliquerai le principe du jeu : \n")
-    print("\t- Je viens de penser a un nombre entre 1 et 10. Devinez lequel ?\n")
+    print("\t- Je viens de penser a un nombre entre 1 et "+str(DIFFICULTY[level][1])+". Devinez lequel ?\n")
     print("\t- Att : vous avez le droit a trois essais !\n")
     print("\t- Si vous devinez mon nombre des le premier coup, vous gagnez le double de votre mise !\n")
     print("\t- Si vous le devinez au 2e coup, vous gagnez exactement votre mise !\n")
@@ -17,7 +18,7 @@ def user_input(max):
     while True:
         try:
             nb_user = int(nb_user)
-            if(nb_user > 1 and nb_user <= max):
+            if(nb_user >= 1 and nb_user <= max):
                 break
             else:
                 raise ValueError
@@ -49,9 +50,56 @@ def fun_mise(solde):
         except ValueError:
             mise = input("\t- Le montant saisi n'est pas valide. Entrer SVP un montant entre 1 et "+str(solde)+"e : ")
 
-    return mise
+    solde = solde - mise
+
+    return mise, solde
 
 def get_stats(mise_moy, nb_coup_moy):
     np.array(mise_moy)
     np.array(nb_coup_moy)
     return np.mean(mise_moy), np.mean(nb_coup_moy)
+
+def affiche_stats(stats):
+    print("\t- La mise moyenne est de : ", stats[0], "euros.")
+    print("\t- Le nombre de coup moyen est de : ", stats[1], "coups.")
+
+    print("\t- Le nombre de coup moyen est de : ", stats[1], "coups.")
+
+def create_user(cur, cnx, name_user, solde):
+    date = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    sql_add_user = """INSERT INTO user 
+    (name, solde, timestamp, nb_mise, mise_total, level_max, level_actual, nb_win_first_try, nb_win, nb_lose, gain_max, mise_max, mise_min) 
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+    value = (name_user, solde, date, 0, 1, 0, 0, 0, 0, 0, 0, 0, 'NULL')
+    cur.execute(sql_add_user, value)
+    cnx.commit()
+
+def update_date(cur, cnx, name_user):
+    sql_modify_date ="""UPDATE `user` SET `timestamp`= %s WHERE name = %s"""
+    value = (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), name_user)
+    cur.execute(sql_modify_date, value)
+    cnx.commit()
+
+def update_mise_max(cur, cnx, mise_max, name_user):
+    sql_modify_mise_max ="""UPDATE `user` SET `mise_max`= %s WHERE name = %s"""
+    value = (mise_max, name_user)
+    cur.execute(sql_modify_mise_max, value)
+    cnx.commit()
+
+def update_mise_min(cur, cnx, mise_min, name_user):
+    sql_modify_mise_min ="""UPDATE `user` SET `mise_min`= %s WHERE name = %s"""
+    value = (mise_min, name_user)
+    cur.execute(sql_modify_mise_min, value)
+    cnx.commit()
+    
+def update_nb_win_first_try(cur, cnx, nb_win_first_try, name_user):
+    sql_modify_nb_win_first_try ="""UPDATE `user` SET `nb_win_first_try`= %s WHERE name = %s"""
+    value = (nb_win_first_try, name_user)
+    cur.execute(sql_modify_nb_win_first_try, value)
+    cnx.commit()
+
+def update_solde(cur, cnx, solde, name_user):
+    sql_modify_solde ="""UPDATE `user` SET `solde`= %s WHERE name = %s"""
+    value = (solde, name_user)
+    cur.execute(sql_modify_solde, value)
+    cnx.commit()
