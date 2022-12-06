@@ -17,7 +17,7 @@ def user_input(max):
     while True:
         try:
             nb_user = int(nb_user)
-            if(nb_user > 1 and nb_user <= max):
+            if(nb_user >= 1 and nb_user <= max):
                 break
             else:
                 raise ValueError

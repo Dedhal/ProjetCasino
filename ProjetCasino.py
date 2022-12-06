@@ -11,6 +11,8 @@ def main():
     DOTATION = 10
     solde = DOTATION
     level = 0
+    mise_max = 0
+    mise_min = 0
 
     name_user = input("\t- Je suis Python. Quel est votre pseudo ? ")
     mc.rules(name_user)
@@ -23,6 +25,8 @@ def main():
         mise_moy.append(mise)
         
         nb_python = randint(1, DIFFICULTY[level][1])
+        
+       
         print(nb_python)
         
         for nb_coup in range(DIFFICULTY[level][0]):
@@ -31,6 +35,13 @@ def main():
                     
             if nb_user == nb_python:
                 print("\t- Bravo, vous avez gagne !")
+                # la mise la plus elevee
+                mise_max = max(mise_moy)
+                print("\t- Mise la plus elevee: "+str(mise_max))
+                # la mise la plus faible
+                mise_min = min(mise_moy)
+                print("\t- Mise la plus faible: "+str(mise_min))
+               
                 nb_coup_moy.append(nb_coup+1)
                 if nb_coup == 0:
                     solde += mise * 2
@@ -60,13 +71,21 @@ def main():
                 print("\t- Il vous reste " + str(DIFFICULTY[level][0] - nb_coup - 1) + " essais !\n")
             else:
                 print("\t- Vous avez perdu ! Mon nombre est "+str(nb_python)+" !")
+                # la mise la plus elevee
+                mise_max = max(mise_moy)
+                print("\t- Mise la plus elevee: "+str(mise_max))
+                # la mise la plus faible
+                mise_min = min(mise_moy)
+                print("\t- Mise la plus faible: "+str(mise_min))
                 solde -= mise
                 stats = mc.get_stats(mise_moy, nb_coup_moy)
                 print("")
                 if level > 0:
                     level -= 1
                     mc.continuer()
-                
+
+            
+        
         
         #print("")
             
