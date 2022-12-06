@@ -2,6 +2,7 @@
 
 from random import randint
 import mysql.connector
+import datetime
 import moduleCasino as mc
 
 def main():
@@ -11,9 +12,19 @@ def main():
     DOTATION = 10
     solde = DOTATION
     level = 0
-
+    date = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    
     name_user = input("\t- Je suis Python. Quel est votre pseudo ? ")
+    
+    sql_check_if_user_exist = """SELECT `name` FROM `user` WHERE name = %s"""
+    sql_add_user = """INSERT INTO user 
+    (name, solde, timestamp, nb_mise, mise_total, level_max, level_actual, nb_win_first_try, nb_win, nb_lose, gain_max, mise_max) 
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+    value = (name_user, solde, date, 0, 1, 0, 0, 0, 0, 0, 0, 0)
+    cur.execute(sql_add_user, value)
+    cnx.commit()
     mc.rules(name_user)
+ 
     
     while True:
         print("\t- Votre solde: "+str(solde)+"e")
@@ -73,10 +84,11 @@ def main():
 
     #mise_moy.append(mise)
 
-    
+ 
     
 
     
 cnx = mysql.connector.connect(user="291957", password="eKy@SwM4Fe2ab6Z", host="mysql-casino-jmme.alwaysdata.net", database="casino-jmme_bdd")
+cur = cnx.cursor()
 print("Connexion successful !")
 main()
