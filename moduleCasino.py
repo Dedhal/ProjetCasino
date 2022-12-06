@@ -54,23 +54,23 @@ def fun_mise(solde):
 
     return mise, solde
 
-def get_stats(mise_moy, nb_coup_moy):
-    np.array(mise_moy)
-    np.array(nb_coup_moy)
-    return np.mean(mise_moy), np.mean(nb_coup_moy)
+#def get_stats(mise_moy, nb_coup_moy):
+#    mise_moy = mise_totale / nb_mise
+#    nb_coup_moy = nb_coup_total / nb_parties
+#    return np.mean(mise_moy), np.mean(nb_coup_moy)
 
 def affiche_stats(stats):
-    print("\t- La mise moyenne est de : ", stats[0], "euros.")
-    print("\t- Le nombre de coup moyen est de : ", stats[1], "coups.")
-
-    print("\t- Le nombre de coup moyen est de : ", stats[1], "coups.")
+    print("\t- La mise moyenne est de : ", str(stats[0]), "euros.")
+    print("\t- Le nombre de coup moyen est de : ", str(stats[1]), "coups.")
+    print("\t- Mise la plus elevee: "+str(stats[2]))
+    print("\t- Mise la plus faible: "+str(stats[3]))
 
 def create_user(cur, cnx, name_user, solde):
     date = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     sql_add_user = """INSERT INTO user 
     (name, solde, timestamp, nb_mise, mise_total, level_max, level_actual, nb_win_first_try, nb_win, nb_lose, gain_max, mise_max, mise_min) 
     VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
-    value = (name_user, solde, date, 0, 1, 0, 0, 0, 0, 0, 0, 0, 'NULL')
+    value = (name_user, solde, date, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'NULL')
     cur.execute(sql_add_user, value)
     cnx.commit()
 
