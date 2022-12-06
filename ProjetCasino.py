@@ -86,16 +86,22 @@ def main():
                 nb_coup_moy.append(nb_coup+1)
                 if nb_coup == 0:
                     solde += mise * 2
+                    sql_modify_solde ="""UPDATE `user` 
+                    SET `solde`= %s 
+                    WHERE name = %s"""
+                    value = (solde, name_user)
+                    cur.execute(sql_modify_solde, value)
+                    cnx.commit()
                     print("\t- Vous avez gagne le double de votre mise !")
                     if level + 1 < 3:
                         level += 1
-                        mc.continuer()
+                    mc.continuer()
                 elif nb_coup == 1:
                     solde += mise
                     print("\t- Vous avez gagne votre mise !")
                     if level + 1 < 3:
                         level += 1
-                        mc.continuer()
+                    mc.continuer()
                 else:
                     solde += mise / 2
                     print("\t- Vous avez gagne la moitie de votre mise !")
