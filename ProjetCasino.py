@@ -16,8 +16,7 @@ def main():
 
     name_user = input("\t- Je suis Python. Quel est votre pseudo ? ")
     date = datetime.datetime.now()
-    print('Dernière connexion :')
-    print(date)
+    print("\t-Dernière connexion le "+ str(date))
 
     mc.rules(name_user)
     
