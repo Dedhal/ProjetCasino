@@ -36,7 +36,7 @@ def main():
     cur.execute(sql_check_if_user_exist, (value,))
     myresult = cur.fetchone()
 
-    if myresult[0] > 1:
+    if myresult[0] >= 1:
         name_user = myresult[1]
         solde = myresult[2]
         date = myresult[3]
@@ -50,7 +50,12 @@ def main():
         gain_max = myresult[10]
         mise_max = myresult[11]
         print("\t- Votre dernière connexion remonte au", format_date(date, format='long', locale='fr'))
-        print()
+        sql_modify_date ="""UPDATE `user` 
+        SET `timestamp`= %s 
+        WHERE name = %s"""
+        value = (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), name_user)
+        cur.execute(sql_modify_date, value)
+        cnx.commit()
     else: 
         (8, 'Mat', 10.0, datetime.datetime(2022, 12, 6, 12, 58), 0, 1.0, 0, 0, 0, 0, 0, 0.0, 0.0)
         sql_add_user = """INSERT INTO user 
