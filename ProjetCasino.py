@@ -2,6 +2,7 @@
 
 from random import randint
 import numpy as np
+import datetime
 import mysql.connector
 import moduleCasino as mc
 
@@ -14,6 +15,10 @@ def main():
     level = 0
 
     name_user = input("\t- Je suis Python. Quel est votre pseudo ? ")
+    date = datetime.datetime.now()
+    print('Dernière connexion :')
+    print(date)
+
     mc.rules(name_user)
     
     while True:
