@@ -14,6 +14,8 @@ def main():
     solde = DOTATION
     level = 0
     nb_win_first_try = 0
+    gain_max = 0
+    gain_min = None
 
     name_user = input("\t- Je suis Python. Quel est votre pseudo ? ")
 
@@ -34,7 +36,7 @@ def main():
         print(nb_python)
         
         for nb_coup in range(DIFFICULTY[level][0]):
-            
+
             nb_user = mc.user_input(DIFFICULTY[level][1])
 
             # Number of times the user found the correct number for the firs time
@@ -51,10 +53,14 @@ def main():
                 if nb_coup == 0:
                     solde += mise * 2
                     print("\t- Vous avez gagne le double de votre mise !")
-                    
+
                     # Highest gain
                     gain_max = mise * 2
                     print("\t- Gain le plus élevé : "+str(gain_max))
+                    
+                    # Lowest gain
+                    gain_min = gain_max if gain_min == None else gain_max if gain_max < gain_min else gain_min
+                    print("\t- Gain le moins élevé : "+str(gain_min))
 
                     if level + 1 < 3:
                         level += 1
@@ -66,6 +72,10 @@ def main():
                     gain_max = mise
                     print("\t- Gain le plus élevé : "+str(gain_max))
 
+                    # Lowest gain
+                    gain_min = gain_max if gain_min == None else gain_max if gain_max < gain_min else gain_min
+                    print("\t- Gain le moins élevé : "+str(gain_min))
+
                     print("\t- Vous avez gagne votre mise !")
                     if level + 1 < 3:
                         level += 1
@@ -76,6 +86,10 @@ def main():
                     # Highest gain
                     gain_max = mise / 2
                     print("\t- Gain le plus élevé : "+str(gain_max))
+
+                    # Lowest gain
+                    gain_min = gain_max if gain_min == None else gain_max if gain_max < gain_min else gain_min
+                    print("\t- Gain le moins élevé : "+str(gain_min))
 
                     print("\t- Vous avez gagne la moitie de votre mise !")
                     if level + 1 < 3:
