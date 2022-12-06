@@ -13,8 +13,12 @@ def main():
     level = 0
     mise_max = 0
     mise_min = None
+    partie = 0
+    coup_moyen = 0
+    coup_total = 0
 
     name_user = input("\t- Je suis Python. Quel est votre pseudo ? ")
+
     mc.rules(name_user)
     
     while True:
@@ -22,9 +26,12 @@ def main():
         
         mise = mc.fun_mise(solde)
         
-        #mise_moy.append(mise)
+        mise_moy.append(mise)
         
         nb_python = randint(1, DIFFICULTY[level][1])
+
+        partie += 1
+        
         
        
         print(nb_python)
@@ -35,12 +42,20 @@ def main():
                     
             if nb_user == nb_python:
                 print("\t- Bravo, vous avez gagne !")
+                
                 # la mise la plus elevee
                 mise_max = mise if mise > mise_max else mise_max
                 print("\t- Mise la plus elevee: "+str(mise_max))
 
                 # la mise la plus faible
                 mise_min = mise if mise_min == None else mise if mise < mise_min else mise_min 
+                #coups total
+                coup_total += nb_coup
+                # coup moyen par partie
+                coup_moyen = (coup_total + nb_coup) / partie
+                print("\t- Coup moyen par partie: "+str(coup_moyen))
+                print("\t- Nombre de partie: "+str(partie))
+                
                 print("\t- Mise la plus faible: "+str(mise_min))
                
                 nb_coup_moy.append(nb_coup+1)
@@ -71,7 +86,9 @@ def main():
                 print("\t- Votre nbre est trop petit !\n")
                 print("\t- Il vous reste " + str(DIFFICULTY[level][0] - nb_coup - 1) + " essais !\n")
             else:
+                
                 print("\t- Vous avez perdu ! Mon nombre est "+str(nb_python)+" !")
+                
                 # la mise la plus élevée 
                 mise_max = mise if mise > mise_max else mise_max
                 print("\t- Mise la plus elevee: "+str(mise_max))
@@ -79,9 +96,17 @@ def main():
                 # la mise la plus faible
                 mise_min = mise if mise_min == None else mise if mise < mise_min else mise_min 
                 print("\t- Mise la plus faible: "+str(mise_min))
+                #coup total
+                coup_total += nb_coup
+
+                # coup moyen par partie
+                coup_moyen = (coup_total + nb_coup) / partie
+                print("\t- Coup moyen par partie: "+str(coup_moyen))
+                print("\t- Nombre de partie: "+str(partie))
+                
                 solde -= mise
                 stats = mc.get_stats(mise_moy, nb_coup_moy)
-                print("")
+                
                 if level > 0:
                     level -= 1
                     mc.continuer()
@@ -93,6 +118,10 @@ def main():
             
 
     #mise_moy.append(mise)
+
+    #nbre de partie total 
+
+    #nbre de coup total
 
     
     
