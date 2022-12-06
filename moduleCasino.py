@@ -68,9 +68,9 @@ def affiche_stats(stats):
 def create_user(cur, cnx, name_user, solde):
     date = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     sql_add_user = """INSERT INTO user 
-    (name, solde, timestamp, nb_mise, mise_total, level_max, level_actual, nb_win_first_try, nb_win, nb_lose, gain_max, mise_max, mise_min) 
-    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
-    value = (name_user, solde, date, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'NULL')
+    (name, solde, timestamp, nb_mise, mise_total, level_max, level_actual, nb_win_first_try, nb_win, nb_lose, gain_max, mise_max, mise_min, coup_total, nb_parties) 
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+    value = (name_user, solde, date, 0, 0, 0, 0, 0, 0, 0, 0, 0, 'NULL', 0, 0)
     cur.execute(sql_add_user, value)
     cnx.commit()
 
@@ -103,3 +103,23 @@ def update_solde(cur, cnx, solde, name_user):
     value = (solde, name_user)
     cur.execute(sql_modify_solde, value)
     cnx.commit()
+
+def set_level_max(level, level_max, cur, cnx, name_user):
+    sql_modify_level_actual ="""UPDATE `user` SET `level_actual`= %s WHERE name = %s"""
+    value = (level, name_user)
+    cur.execute(sql_modify_level_actual, value)
+    cnx.commit() 
+    if level > level_max:
+        print(level)
+        level_max = level
+        sql_modify_level_max ="""UPDATE `user` SET `level_max`= %s WHERE name = %s"""
+        value = (level_max, name_user)
+        cur.execute(sql_modify_level_max, value)
+        cnx.commit()
+
+def set_coups_parties(cur, cnx, coup_total, nb_parties, name_user):
+    sql_modify_coup_total ="""UPDATE `user` SET `coup_total`= %s, `nb_parties` = %s WHERE name = %s"""
+    value = (coup_total, nb_parties, name_user)
+    cur.execute(sql_modify_coup_total, value)
+    cnx.commit()
+
