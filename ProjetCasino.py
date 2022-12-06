@@ -13,6 +13,7 @@ def main():
     DOTATION = 10
     solde = DOTATION
     level = 0
+    nb_win_first = 0
 
     name_user = input("\t- Je suis Python. Quel est votre pseudo ? ")
     date = datetime.datetime.now()
@@ -33,7 +34,14 @@ def main():
         for nb_coup in range(DIFFICULTY[level][0]):
             
             nb_user = mc.user_input(DIFFICULTY[level][1])
-                    
+
+            if nb_user == nb_python and nb_coup == 0:
+                nb_win_first += 1
+                if nb_win_first == 1:
+                    print("\t- Vous avez réussi à trouver le bon nombre dès le premier coup à "+str(nb_win_first)+" reprise")
+                else:
+                    print("\t- Vous avez réussi à trouver le bon nombre dès le premier coup à "+str(nb_win_first)+" reprises")
+
             if nb_user == nb_python:
                 print("\t- Bravo, vous avez gagne !")
                 nb_coup_moy.append(nb_coup+1)
