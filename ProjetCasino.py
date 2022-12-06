@@ -1,7 +1,6 @@
 # -*- encoding: utf-8 -*-
 
 from random import randint
-import numpy as np
 import mysql.connector
 import moduleCasino as mc
 

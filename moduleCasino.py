@@ -1,3 +1,5 @@
+import numpy as np
+
 def rules(name_user):
     print("\t- Hello " + name_user + ", vous avez 10e, Tres bien ! Installez vous SVP a la table de pari.\n\t\t\t Je vous expliquerai le principe du jeu : \n")
     print("\t- Je viens de penser a un nombre entre 1 et 10. Devinez lequel ?\n")
